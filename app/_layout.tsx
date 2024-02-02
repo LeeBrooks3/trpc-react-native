@@ -2,12 +2,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink } from '@trpc/client';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
 
-import { trpc } from './client/trpc';
-import {TestComponent} from "./components/trpc";
+import { trpc } from '../client/trpc';
+import {Slot} from "expo-router";
 
-export default function App() {
+export default function AppLayout() {
     const [queryClient] = useState(() => new QueryClient());
     const [trpcClient] = useState(() =>
         trpc.createClient({
@@ -22,20 +21,9 @@ export default function App() {
     return (
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
             <QueryClientProvider client={queryClient}>
-                <View style={styles.container}>
-                    <TestComponent />
-                    <StatusBar style="auto" />
-                </View>
+                <StatusBar style="auto" />
+                <Slot />
             </QueryClientProvider>
         </trpc.Provider>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
